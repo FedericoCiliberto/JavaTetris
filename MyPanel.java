@@ -29,8 +29,7 @@ public class MyPanel extends JPanel implements KeyListener {
 	public boolean speedUp=false;
 	
 	TetrisPiece piece;
-	Table table=new Table(UNIT);
-	int[] boundaries=new int[10]; //contains the higher points of each column of the table, to know when the falling piece needs to stop
+	Table table=new Table(UNIT,WIDTH,HEIGHT);
 	Timer fallingTimer;
 	Timer playerTimer;
 	Random random=new Random();
@@ -41,18 +40,14 @@ public class MyPanel extends JPanel implements KeyListener {
 		this.setBackground(Color.black);
 		this.setFocusable(true);
 		this.addKeyListener(this);
-		for(int i=0;i<10;i++) {
-			boundaries[i]=HEIGHT-2*UNIT; //at the start there are not pieces. -2*UNIT because there is the frame AND the boundaries are set at the start of the rectangle
-		}
 		generatePiece();
 		fallingTimer=new Timer(FALLING_TIMER_SPEED,e->{
 			if(piece!=null) {
 				piece.fall();
-				if(checkCollision()) {
+				if(table.checkCollision(piece)) {
 					table.addPiece(piece);
-					updateBoundaries();
 					generatePiece();
-					if(checkGameOver()) {
+					if(table.checkGameOver(piece)) {
 						gameOver();
 					}
 				}
@@ -112,50 +107,12 @@ public class MyPanel extends JPanel implements KeyListener {
 
 	private void gameOver() {
 		fallingTimer.stop();
+		playerTimer.stop();
 		gameOver=true;
 		repaint();
 		
 	}
-
-
-	private boolean checkGameOver() {
-		for(int i=0;i<10;i++) {
-			if(boundaries[i]<UNIT) {
-				return true;
-			}
-		}
-		return false;
-	}
-
-
-	private void updateBoundaries() { //if i entered here, i made a collision, so i know the new MINIMUM boundarie for every column occupied by the piece. 
-		Position[] pos= piece.getPiecePositions();
-		int i,j;
-		for(i=0;i<4;i++) {
-			int count=0;
-			for(j=0;j<4 && j!=i;j++){ //this loop counts how many pieces over the i-th piece
-				if(pos[j].getX()==pos[i].getX() && pos[j].getY()<pos[i].getY()) {
-					count++;
-				}
-			}
-				
-			boundaries[pos[i].getX()/UNIT-1]=(pos[i].getY()-UNIT)-count*UNIT; //the boundaries go up of one or more depending on how many blocks over
-			
-		}
-		
-	}
-
-
-	private boolean checkCollision() {
-		Position[] pos=piece.getPiecePositions();
-		for(int i=0;i<4;i++) {
-			if(pos[i].getY()>=boundaries[pos[i].getX()/UNIT-1]) { 
-				return true;
-			}
-		}
-		return false;
-	}
-
+	
 
 	@Override
 	public void paint(Graphics g) {
