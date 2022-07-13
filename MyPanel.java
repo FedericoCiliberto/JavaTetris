@@ -20,9 +20,10 @@ public class MyPanel extends JPanel implements KeyListener {
 	public static final int L=4;
 	public static final int J=5;
 	public static final int T=6;
-	public static final int DEFAULT_FALLING_TIMER_SPEED=80;
+	public static final int DEFAULT_FALLING_TIMER_SPEED=300;
+	public static final int SPEEDEDUP_FALLING_TIMER_SPEED=40;
 	public int FALLING_TIMER_SPEED=DEFAULT_FALLING_TIMER_SPEED;
-	public int PLAYER_TIMER_SPEED=50;
+	public int PLAYER_TIMER_SPEED=40;
 	public boolean gameOver=false;
 	
 	public char direction='N'; //can be L=left,R=right,N=none;
@@ -195,7 +196,7 @@ public class MyPanel extends JPanel implements KeyListener {
 	}
 	
 	public void generatePiece(){
-		int i=random.nextInt(I+1 - O) + O; //for now just O and I block available
+		int i=random.nextInt(J+1 - O) + O;
 		switch(i) {
 		case O:
 			piece=new O(UNIT,WIDTH,HEIGHT);
@@ -204,12 +205,16 @@ public class MyPanel extends JPanel implements KeyListener {
 			piece=new I(UNIT,WIDTH,HEIGHT);
 			break;
 		case S:
+			piece=new S(UNIT,WIDTH,HEIGHT);
 			break;
 		case Z:
+			piece=new Z(UNIT,WIDTH,HEIGHT);
 			break;
 		case L:
+			piece=new L(UNIT,WIDTH,HEIGHT);
 			break;
 		case J:
+			piece=new J(UNIT,WIDTH,HEIGHT);
 			break;
 		case T:
 			break;
@@ -233,11 +238,46 @@ public class MyPanel extends JPanel implements KeyListener {
 			break;
 			
 		case KeyEvent.VK_DOWN: //DOWN
-			FALLING_TIMER_SPEED=30;
+			FALLING_TIMER_SPEED=SPEEDEDUP_FALLING_TIMER_SPEED;
 			fallingTimer.setDelay(FALLING_TIMER_SPEED);
 			break;
 		case KeyEvent.VK_UP: //UP
-			piece.rotate();
+			//before rotating, i need to check if by rotating i get collisions i dont want!
+			
+			char type=piece.getType();
+			TetrisPiece anotherPiece;
+			switch(type) {
+				case 'O':
+					 anotherPiece=new O(piece);
+					break;
+				case 'I':
+					 anotherPiece=new I(piece);
+					break;
+				case 'S':
+					 anotherPiece=new S(piece);
+					break;
+				case 'Z':
+					 anotherPiece=new O(piece); //TO CHANGE IN Z etc!!!
+					break;
+				case 'L':
+					 anotherPiece=new O(piece);
+					break;
+				case 'J':
+					 anotherPiece=new O(piece);
+					break;
+				case 'T':
+					 anotherPiece=new O(piece);
+					break;
+				default:  //cant enter here
+					anotherPiece=null;
+					break;
+			}
+			anotherPiece.rotate();
+			if(!table.checkCollision(anotherPiece)){//if rotating the copy of the current piece i get no collision, i can actually rotate the true piece
+				piece.rotate();
+				
+			}
+			
 		}
 		
 	}

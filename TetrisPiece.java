@@ -9,4 +9,7 @@ public interface TetrisPiece {
 	public String getColor();
 	public void goLeft();
 	public void goRight();
+	public int getUNIT();
+	public int getWIDTH();
+	public int getHEIGHT();
 }

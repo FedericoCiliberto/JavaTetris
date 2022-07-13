@@ -1,15 +1,20 @@
 package tetrisGame;
 
+import java.util.Arrays;
+
 public class I implements TetrisPiece {
 	private Position[] piecePositions=new Position[4];
 	private char type='I';
 	private int orientation=1; //2 orientations for I-block. 1=horizontal, 2= vertical.
 	private String color="red";
 	private int UNIT;
-	
+	private int WIDTH;
+	private int HEIGHT;
 	
 	public I(int UNIT,int WIDTH,int HEIGHT) {
 		this.UNIT=UNIT;
+		this.WIDTH=WIDTH;
+		this.HEIGHT=HEIGHT;
 		piecePositions[0]=new Position();
 		piecePositions[1]=new Position();
 		piecePositions[2]=new Position();
@@ -24,6 +29,21 @@ public class I implements TetrisPiece {
 		piecePositions[1].y=0;
 		piecePositions[2].y=0;
 		piecePositions[3].y=0;
+	}
+	public I(TetrisPiece anotherPiece) {
+		piecePositions[0]=new Position();
+		piecePositions[1]=new Position();
+		piecePositions[2]=new Position();
+		piecePositions[3]=new Position();
+		this.UNIT=anotherPiece.getUNIT();
+		this.WIDTH=anotherPiece.getWIDTH();
+		this.HEIGHT=anotherPiece.getHEIGHT();
+		this.color=anotherPiece.getColor();
+		for(int i=0;i<4;i++) {//manual copy
+			this.piecePositions[i].x=anotherPiece.getPiecePositions()[i].getX();
+			this.piecePositions[i].y=anotherPiece.getPiecePositions()[i].getY();
+		}
+		this.type=anotherPiece.getType();
 	}
 	
 	@Override
@@ -65,6 +85,17 @@ public class I implements TetrisPiece {
 			piecePositions[3].y-=UNIT;
 			break;
 		}
+		//if after rotation i went over the margins, i have to fix it!
+		for(int i=0;i<4;i++) {
+			while(piecePositions[i].x<=0) {
+				goRight();
+			}
+			
+			while(piecePositions[i].x>=WIDTH-UNIT){
+				goLeft();
+			}
+			
+		}
 	}
 	
 	@Override
@@ -93,4 +124,20 @@ public class I implements TetrisPiece {
 		}
 		
 	}
+
+	@Override
+	public int getUNIT() {
+		return UNIT;
+	}
+
+	@Override
+	public int getWIDTH() {
+		return WIDTH;
+	}
+
+	@Override
+	public int getHEIGHT() {
+		return HEIGHT;
+	}
+
 }
