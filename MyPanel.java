@@ -23,7 +23,10 @@ public class MyPanel extends JPanel implements KeyListener {
 	public static final int DEFAULT_FALLING_TIMER_SPEED=300;
 	public static final int SPEEDEDUP_FALLING_TIMER_SPEED=40;
 	public int FALLING_TIMER_SPEED=DEFAULT_FALLING_TIMER_SPEED;
-	public int PLAYER_TIMER_SPEED=40;
+	public static final int PLAYER_TIMER_SPEED=40;
+	public static final int COMPLETE_LAYER_TIMER_SPEED=10;
+	public static final int COMPLETE_LAYER_DELAY=500;
+	
 	public boolean gameOver=false;
 	
 	public char direction='N'; //can be L=left,R=right,N=none;
@@ -33,6 +36,7 @@ public class MyPanel extends JPanel implements KeyListener {
 	Table table=new Table(UNIT,WIDTH,HEIGHT);
 	Timer fallingTimer;
 	Timer playerTimer;
+	Timer completeLayerTimer;
 	Random random=new Random();
 	
 	
@@ -62,6 +66,15 @@ public class MyPanel extends JPanel implements KeyListener {
 			repaint();
 		});
 		playerTimer.start();
+		
+		completeLayerTimer=new Timer(COMPLETE_LAYER_TIMER_SPEED,e->{//checks for complete layers
+			int i=table.checkCompleteLayer();
+			while(i!=-1){
+				table.removeCompleteLayer(i);
+				i=table.checkCompleteLayer();
+			}
+		});
+		completeLayerTimer.start();
 	}
 
 	
@@ -196,7 +209,7 @@ public class MyPanel extends JPanel implements KeyListener {
 	}
 	
 	public void generatePiece(){
-		int i=random.nextInt(J+1 - O) + O;
+		int i=random.nextInt(T+1 - O) + O;
 		switch(i) {
 		case O:
 			piece=new O(UNIT,WIDTH,HEIGHT);
@@ -217,6 +230,7 @@ public class MyPanel extends JPanel implements KeyListener {
 			piece=new J(UNIT,WIDTH,HEIGHT);
 			break;
 		case T:
+			piece=new T(UNIT,WIDTH,HEIGHT);
 			break;
 		}
 	}
@@ -257,16 +271,16 @@ public class MyPanel extends JPanel implements KeyListener {
 					 anotherPiece=new S(piece);
 					break;
 				case 'Z':
-					 anotherPiece=new O(piece); //TO CHANGE IN Z etc!!!
+					 anotherPiece=new Z(piece); 
 					break;
 				case 'L':
-					 anotherPiece=new O(piece);
+					 anotherPiece=new L(piece);
 					break;
 				case 'J':
-					 anotherPiece=new O(piece);
+					 anotherPiece=new J(piece);
 					break;
 				case 'T':
-					 anotherPiece=new O(piece);
+					 anotherPiece=new T(piece);
 					break;
 				default:  //cant enter here
 					anotherPiece=null;
@@ -309,4 +323,5 @@ public class MyPanel extends JPanel implements KeyListener {
 	        return null;
 	    }
 	}
+	
 }

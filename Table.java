@@ -1,5 +1,7 @@
 package tetrisGame;
 
+import java.awt.Color;
+
 public class Table {
 	public class Box{
 		boolean occupied=false;
@@ -82,6 +84,39 @@ public class Table {
 		return false;
 	}
 
+	public int checkCompleteLayer() { //-1 if there are no complete layers. Otherwhise returns the index of the complete layer
+		int i,j;
+		int flag=0;
+		
+		for(i=0;i<20;i++) {
+			flag=0;
+			for(j=0;j<10 && flag==0 ;j++) {
+				if(!matrix[i][j].occupied) {
+					flag=1;
+				}
+			}
+			if(flag==0) {
+				//the layer becomes white for a moment (just for graphics purposes)
+				for(int k=0;k<10;k++) {
+					matrix[i][k].setColor("white");
+				}
+				return i;
+			}
+		}
+		return -1;
+	}
+	public void removeCompleteLayer(int index) {//every layer OVER the complete one goes down of one
+		int i,j;
+		//thene i clear the layer
+		for(i=index;i>0;i--) {
+			for(j=0;j<10;j++) {
+				matrix[i][j].setOccupied(matrix[i-1][j].isOccupied());
+				matrix[i][j].setColor(matrix[i-1][j].getColor());
+				
+			}
+		}
+		
+	}
 
 }
 

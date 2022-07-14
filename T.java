@@ -5,7 +5,7 @@ import java.util.Arrays;
 public class T implements TetrisPiece {
 	private Position[] piecePositions=new Position[4];
 	private char type='T';
-	private int orientation=1; //4 orientations for J-block.
+	private int orientation=1; //4 orientations for T-block.
 	private String color="orange";
 	private int UNIT;
 	private int WIDTH;
@@ -20,10 +20,10 @@ public class T implements TetrisPiece {
 		piecePositions[2]=new Position();
 		piecePositions[3]=new Position();
 		
-		piecePositions[0].x=(WIDTH/2)+UNIT;
-		piecePositions[1].x=piecePositions[0].x;
-		piecePositions[2].x=piecePositions[1].x-UNIT;
-		piecePositions[3].x=piecePositions[2].x-UNIT;
+		piecePositions[0].x=(WIDTH/2);
+		piecePositions[1].x=piecePositions[0].x-UNIT;
+		piecePositions[2].x=piecePositions[0].x;
+		piecePositions[3].x=piecePositions[0].x+UNIT;
 		
 		piecePositions[0].y=UNIT;
 		piecePositions[1].y=0;
@@ -61,54 +61,54 @@ public class T implements TetrisPiece {
 		case 1: //vado in orientazione 2.
 			orientation=2;
 			//ROTATE AROUND BLOCK 2
-			piecePositions[0].x-=2*UNIT;
-			piecePositions[0].y-=0;
+			piecePositions[0].x-=UNIT;
+			piecePositions[0].y-=UNIT;
 			
-			piecePositions[1].x-=UNIT;
-			piecePositions[1].y+=UNIT;
+			piecePositions[1].x+=UNIT;
+			piecePositions[1].y-=UNIT;
 			
-			piecePositions[3].x+=UNIT;
-			piecePositions[3].y-=UNIT;
+			piecePositions[3].x-=UNIT;
+			piecePositions[3].y+=UNIT;
 			
 			break;
 			
 		case 2: //Vado in orientazione 3
 			orientation=3;
 			
-			piecePositions[0].x+=0;
-			piecePositions[0].y-=2*UNIT;
-			
-			piecePositions[1].x-=UNIT;
-			piecePositions[1].y-=UNIT;
-			
-			piecePositions[3].x+=UNIT;
-			piecePositions[3].y+=UNIT;
-			
-			break;
-			
-		case 3:
-			orientation=4;
-			piecePositions[0].x+=2*UNIT;
-			piecePositions[0].y+=0;
-			
-			piecePositions[1].x+=UNIT;
-			piecePositions[1].y-=UNIT;
-			
-			piecePositions[3].x-=UNIT;
-			piecePositions[3].y+=UNIT;
-			break;
-			
-		case 4:
-			orientation=1;
-			
-			piecePositions[0].x+=0;
-			piecePositions[0].y+=2*UNIT;
+			piecePositions[0].x+=UNIT;
+			piecePositions[0].y-=UNIT;
 			
 			piecePositions[1].x+=UNIT;
 			piecePositions[1].y+=UNIT;
 			
 			piecePositions[3].x-=UNIT;
 			piecePositions[3].y-=UNIT;
+			
+			break;
+			
+		case 3:
+			orientation=4;
+			piecePositions[0].x+=UNIT;
+			piecePositions[0].y+=UNIT;
+			
+			piecePositions[1].x-=UNIT;
+			piecePositions[1].y+=UNIT;
+			
+			piecePositions[3].x+=UNIT;
+			piecePositions[3].y-=UNIT;
+			break;
+			
+		case 4:
+			orientation=1;
+			
+			piecePositions[0].x-=UNIT;
+			piecePositions[0].y+=UNIT;
+			
+			piecePositions[1].x-=UNIT;
+			piecePositions[1].y-=UNIT;
+			
+			piecePositions[3].x+=UNIT;
+			piecePositions[3].y+=UNIT;
 			break;
 			
 		}
